@@ -12,7 +12,8 @@ namespace Thandizo.Resources.WebApi
         /// <param name="services"></param>
         public static IServiceCollection AddDomainServices(this IServiceCollection services)
         {
-            //services.AddScoped<IResourceAllocationRepository, ResourceAllocationRepository>();
+            services.AddScoped<IResourceAllocationService, ResourceAllocationService>();
+            services.AddScoped<IHealthFacilityResourceService, HealthFacilityResourceService>();
             return services.AddScoped<IResourceService, ResourceService>();
         }
     }
