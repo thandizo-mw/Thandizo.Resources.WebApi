@@ -32,11 +32,11 @@ namespace Thandizo.Core.WebApi.Controllers
             return Ok(response.Result);
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("GetByFacility")]
         [CatchException(MessageHelper.GetListError)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetByFacility([FromQuery]int centerId)
         {            
-            var response = await _service.Get();
+            var response = await _service.GetByFacility(centerId);
 
             if (response.IsErrorOccured)
             {
@@ -53,10 +53,10 @@ namespace Thandizo.Core.WebApi.Controllers
             var outputHandler = await _service.Add(healthFacilityResource);
             if (outputHandler.IsErrorOccured)
             {
-                return BadRequest(outputHandler);
+                return BadRequest(outputHandler.Message);
             }
 
-            return Created("", outputHandler);
+            return Created("", outputHandler.Message);
         }
 
         [HttpPut("Update")]
@@ -66,10 +66,10 @@ namespace Thandizo.Core.WebApi.Controllers
             var outputHandler = await _service.Update(healthFacilityResource);
             if (outputHandler.IsErrorOccured)
             {
-                return BadRequest(outputHandler);
+                return BadRequest(outputHandler.Message);
             }
 
-            return Ok(outputHandler);
+            return Ok(outputHandler.Message);
         }
 
         [HttpDelete("Delete")]
@@ -79,10 +79,10 @@ namespace Thandizo.Core.WebApi.Controllers
             var outputHandler = await _service.Delete(facilityResourceId);
             if (outputHandler.IsErrorOccured)
             {
-                return BadRequest(outputHandler);
+                return BadRequest(outputHandler.Message);
             }
 
-            return Ok(outputHandler);
+            return Ok(outputHandler.Message);
         }
     }
 }
