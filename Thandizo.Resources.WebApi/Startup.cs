@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -64,7 +65,11 @@ namespace Thandizo.Resources.WebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Khusa API V1");
             });
-
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod());
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

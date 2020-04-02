@@ -49,6 +49,7 @@ namespace Thandizo.Core.WebApi.Controllers
         [HttpPost("Add")]
         [ValidateModelState]
         [CatchException(MessageHelper.AddNewError)]
+        [ValidateModelState]
         public async Task<IActionResult> Add([FromBody]ResourceDTO resource)
         {
             var outputHandler = await _service.Add(resource);
