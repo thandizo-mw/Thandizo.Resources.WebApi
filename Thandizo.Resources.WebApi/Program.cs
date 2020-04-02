@@ -20,6 +20,7 @@ namespace Thandizo.Resources.WebApi
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseUrls("http://*:5003");
                     webBuilder.UseStartup<Startup>();
                 });
     }

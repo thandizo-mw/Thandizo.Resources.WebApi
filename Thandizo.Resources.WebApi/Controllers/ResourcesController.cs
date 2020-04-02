@@ -47,6 +47,7 @@ namespace Thandizo.Core.WebApi.Controllers
         }
 
         [HttpPost("Add")]
+        [ValidateModelState]
         [CatchException(MessageHelper.AddNewError)]
         [ValidateModelState]
         public async Task<IActionResult> Add([FromBody]ResourceDTO resource)
@@ -54,10 +55,10 @@ namespace Thandizo.Core.WebApi.Controllers
             var outputHandler = await _service.Add(resource);
             if (outputHandler.IsErrorOccured)
             {
-                return BadRequest(outputHandler);
+                return BadRequest(outputHandler.Message);
             }
 
-            return Created("", outputHandler);
+            return Created("", outputHandler.Message);
         }
 
         [HttpPut("Update")]
@@ -68,10 +69,10 @@ namespace Thandizo.Core.WebApi.Controllers
             var outputHandler = await _service.Update(resource);
             if (outputHandler.IsErrorOccured)
             {
-                return BadRequest(outputHandler);
+                return BadRequest(outputHandler.Message);
             }
 
-            return Ok(outputHandler);
+            return Ok(outputHandler.Message);
         }
 
         [HttpDelete("Delete")]
@@ -81,10 +82,10 @@ namespace Thandizo.Core.WebApi.Controllers
             var outputHandler = await _service.Delete(resourceId);
             if (outputHandler.IsErrorOccured)
             {
-                return BadRequest(outputHandler);
+                return BadRequest(outputHandler.Message);
             }
 
-            return Ok(outputHandler);
+            return Ok(outputHandler.Message);
         }
     }
 }

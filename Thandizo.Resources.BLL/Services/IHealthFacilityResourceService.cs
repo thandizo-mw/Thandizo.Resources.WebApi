@@ -8,7 +8,7 @@ namespace Thandizo.FacilityResources.BLL.Services
     {
         Task<OutputResponse> Add(HealthFacilityResourceDTO resource);
         Task<OutputResponse> Delete(int facilityResourceId);
-        Task<OutputResponse> Get();
+        Task<OutputResponse> GetByFacility(int centerId);
         Task<OutputResponse> Get(int facilityResourceId);
         Task<OutputResponse> Update(HealthFacilityResourceDTO resource);
     }

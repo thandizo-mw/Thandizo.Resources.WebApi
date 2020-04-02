@@ -6,6 +6,7 @@ using Thandizo.ApiExtensions.DataMapping;
 using Thandizo.ApiExtensions.General;
 using Thandizo.DAL.Models;
 using Thandizo.DataModels.DataCenters;
+using Thandizo.DataModels.DataCenters.Responses;
 using Thandizo.DataModels.General;
 
 namespace Thandizo.FacilityResources.BLL.Services
@@ -21,33 +22,58 @@ namespace Thandizo.FacilityResources.BLL.Services
 
         public async Task<OutputResponse> Get(int facilityResourceId)
         {
-            var resource = await _context.HealthFacilityResources.FirstOrDefaultAsync(x => x.FacilityResourceId.Equals(facilityResourceId));
-           
-            var mappedHealthFacilityResource = new AutoMapperHelper<HealthFacilityResources, HealthFacilityResourceDTO>().MapToObject(resource);
+            var resource = await _context.HealthFacilityResources.Where(x => x.FacilityResourceId.Equals(facilityResourceId))
+                .Select(x => new HealthFacilityResourceResponse
+                {
+                    CenterId = x.CenterId,
+                    CreatedBy = x.CreatedBy,
+                    DateCreated = x.DateCreated,
+                    DateModified = x.DateModified,
+                    FacilityResourceId = x.FacilityResourceId,
+                    ModifiedBy = x.ModifiedBy,
+                    PatientStatusName = x.ResourceAllocation.PatientStatus.PatientStatusName,
+                    Quantity = x.Quantity,
+                    ResourceAllocationId = x.ResourceAllocationId,
+                    ResourceName = x.ResourceAllocation.Resource.ResourceName,
+                    RowAction = x.RowAction
+                }).FirstOrDefaultAsync();
 
             return new OutputResponse
             {
                 IsErrorOccured = false,
-                Result = mappedHealthFacilityResource
+                Result = resource
             };
         }
 
-        public async Task<OutputResponse> Get()
+        public async Task<OutputResponse> GetByFacility(int centerId)
         {
-            var resources = await _context.HealthFacilityResources.OrderBy(x => x.FacilityResourceId).ToListAsync();
-
-            var mappedHealthFacilityResources = new AutoMapperHelper<HealthFacilityResources, HealthFacilityResourceDTO>().MapToList(resources);
+            var resources = await _context.HealthFacilityResources.Where(x => x.CenterId.Equals(centerId))
+                .OrderBy(x => x.FacilityResourceId)
+                .Select(x => new HealthFacilityResourceResponse
+                {
+                    CenterId = x.CenterId,
+                    CreatedBy = x.CreatedBy,
+                    DateCreated = x.DateCreated,
+                    DateModified = x.DateModified,
+                    FacilityResourceId = x.FacilityResourceId,
+                    ModifiedBy = x.ModifiedBy,
+                    PatientStatusName = x.ResourceAllocation.PatientStatus.PatientStatusName,
+                    Quantity = x.Quantity,
+                    ResourceAllocationId = x.ResourceAllocationId,
+                    ResourceName = x.ResourceAllocation.Resource.ResourceName,
+                    RowAction = x.RowAction
+                }).ToListAsync();
 
             return new OutputResponse
             {
                 IsErrorOccured = false,
-                Result = mappedHealthFacilityResources
+                Result = resources
             };
         }
 
         public async Task<OutputResponse> Add(HealthFacilityResourceDTO resource)
         {
-            
+
             var mappedHealthFacilityResource = new AutoMapperHelper<HealthFacilityResourceDTO, HealthFacilityResources>().MapToObject(resource);
             mappedHealthFacilityResource.RowAction = "I";
             mappedHealthFacilityResource.DateCreated = DateTime.UtcNow.AddHours(2);
