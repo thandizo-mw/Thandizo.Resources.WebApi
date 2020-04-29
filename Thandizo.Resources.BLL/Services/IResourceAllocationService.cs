@@ -10,6 +10,7 @@ namespace Thandizo.FacilityResources.BLL.Services
         Task<OutputResponse> Delete(int resourceAllocationId);
         Task<OutputResponse> Get();
         Task<OutputResponse> Get(int resourceAllocationId);
+        Task<OutputResponse> GetByPatientStatusId(int statusId);
         Task<OutputResponse> Update(ResourceAllocationDTO resourceAllocation);
     }
 }

@@ -45,6 +45,31 @@ namespace Thandizo.FacilityResources.BLL.Services
             };
         }
 
+        public async Task<OutputResponse> GetByPatientStatusId(int statusId)
+        {
+            var resource = await _context.ResourcesAllocation.Where(x => x.PatientStatusId.Equals(statusId))
+                .Select(x => new ResourceAllocationResponse
+                {
+                    CreatedBy = x.CreatedBy,
+                    DateCreated = x.DateCreated,
+                    DateModified = x.DateModified,
+                    ModifiedBy = x.ModifiedBy,
+                    PatientStatusId = x.PatientStatusId,
+                    PatientStatusName = x.PatientStatus.PatientStatusName,
+                    RequiredQuantity = x.RequiredQuantity,
+                    ResourceAllocationId = x.ResourceAllocationId,
+                    ResourceId = x.ResourceId,
+                    ResourceName = x.Resource.ResourceName,
+                    RowAction = x.RowAction
+                }).ToListAsync();
+
+            return new OutputResponse
+            {
+                IsErrorOccured = false,
+                Result = resource
+            };
+        }
+
         public async Task<OutputResponse> Get()
         {
             var resourceAllocations = await _context.ResourcesAllocation.OrderBy(x => x.ResourceAllocationId)
