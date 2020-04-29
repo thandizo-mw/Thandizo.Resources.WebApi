@@ -32,6 +32,20 @@ namespace Thandizo.Core.WebApi.Controllers
             return Ok(response.Result);
         }
 
+        [HttpGet("GetByPatientStatusId")]
+        [CatchException(MessageHelper.GetItemError)]
+        public async Task<IActionResult> GetByPatientStatusId([FromQuery] int statusId)
+        {
+            var response = await _service.GetByPatientStatusId(statusId);
+
+            if (response.IsErrorOccured)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok(response.Result);
+        }
+
         [HttpGet("GetAll")]
         [CatchException(MessageHelper.GetListError)]
         public async Task<IActionResult> GetAll()
